@@ -70,7 +70,6 @@ export default Vue.extend({
   max-height: 100%;
   margin: 50px;
 }
-
 .results-image {
   border-radius: 50%;
   filter: invert(16%) sepia(25%) saturate(2056%) hue-rotate(137deg) brightness(70%) contrast(99%);
@@ -81,11 +80,15 @@ export default Vue.extend({
   font-size: 15px;
   font-family: "Maven Pro";
   text-align: center;
-
   word-wrap: normal;
 }
+a:hover, a:visited, a:link, a:active
+{
+  color: #013535;
+  text-decoration: none;
+}
 .results-details {
-  display: none;
+  /* display: none; */
 }
 .marked {
   animation: lighten 0.3s ease-in-out 0s forwards;

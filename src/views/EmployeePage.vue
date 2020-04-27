@@ -2,7 +2,7 @@
   <div>
     <div class="employee-container">
       <img class="results-image"
-        :src="$route.params.employeeImage"
+        :src="checkDefault($route.params.employeeImage)"
         v-bind:class="compClasses"
         v-on:mouseover="marked = !marked"
         v-on:mouseleave="marked = !marked"
@@ -11,6 +11,11 @@
         <div>{{$route.params.employeeName}}</div>
         <div class="results-details">{{"Age: "+$route.params.employeeAge }}</div>
         <div class="results-details">{{"Salary: "+$route.params.employeeSalary }}</div>
+        <div class="searchbox">
+          <form >
+            <input type="text" v-model="postFormEmployeeName" placeholder="Change Employee salary here."/>
+          </form>
+        </div>
       </div>
   </div>
   </div>
@@ -25,7 +30,25 @@ export default Vue.extend({
     'employeeName',
     'employeeAge',
     'employeeSalary'
-  ]
+  ],
+  data () {
+    return {
+      salary: String
+    }
+  },
+  computed: {
+  },
+  methods: {
+    checkDefault(routedParam: string) {
+      if (routedParam === undefined) {
+        console.log('employeePage image empty: ' + routedParam)
+        return 'https://cdn0.iconfinder.com/data/icons/elasto-online-store/26/00-ELASTOFONT-STORE-READY_user-circle-512.png'
+      } else {
+        console.log('employeePage image set: ' + routedParam)
+        return routedParam
+      }
+    }
+  }
 })
 </script>
 
@@ -44,6 +67,8 @@ export default Vue.extend({
   margin-bottom: 100px;
   height: 500px;
   width: 500px;
+  border-radius: 50%;
+  filter: invert(16%) sepia(25%) saturate(2056%) hue-rotate(137deg) brightness(60%) contrast(99%);
 }
 .results-text {
   font-size: 30px;

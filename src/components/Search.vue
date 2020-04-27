@@ -6,12 +6,16 @@
         <form v-on:submit.prevent="getEmployeesFiltered(query)">
           <input type="text" v-model="query" placeholder="Search for an employeee name:"/>
         </form>
+        <div class="sorts">
+          <div>Sort alphabetically by name:<input type="checkbox" v-model="sortByName" /></div>
+          <div>Sort increasing by salary:<input type="checkbox" v-model="sortBySalary" name="Sort increasing by salary" /></div>
+        </div>
       </div>
     </div>
     <div class="results-container">
       <Employee
-        v-for='result in filteredResults'
-        :key='result.id'
+        v-for='result in (sortedArrayByName, sortedArrayBySalary, filteredResults)'
+        :key='result.employee_name'
         v-bind:employeeImage='result.profile_image'
         v-bind:employeeName='result.employee_name'
         v-bind:employeeAge='result.employee_age'
@@ -36,13 +40,48 @@ export default Vue.extend({
   data () {
     return {
       marked: false,
+      sortByName: false,
+      sortBySalary: false,
       query: '',
       results: []
     }
   },
   computed: {
+    sortedArrayBySalary: function() {
+      if (!this.sortBySalary) {
+        return this.results
+      }
+
+      const resultsTemp = this.results;
+
+      function compare(a, b) {
+        if (a.employee_salary < b.employee_salary)
+          return -1;
+        if (a.employee_salary > b.employee_salary)
+          return 1;
+        return 0;
+      }
+      return resultsTemp.sort(compare);
+    },
+    sortedArrayByName: function() {
+      if (!this.sortByName) {
+        return this.results
+      }
+
+      const resultsTemp = this.results;
+
+      function compare(a, b) {
+        if (a.employee_name < b.employee_name)
+          return -1;
+        if (a.employee_name > b.employee_name)
+          return 1;
+        return 0;
+      }
+
+      return resultsTemp.sort(compare);
+    },
     filteredResults: function () {
-      return this.results.filter((result) => {
+      return this.results.filter((result: any) => {
         return result.employee_name.match(this.query)
       })
     }
@@ -101,7 +140,12 @@ export default Vue.extend({
   margin-bottom: 50px;
 }
 .searchbox {
-
+  font-family: "Maven Pro";
+  align-self: center;
+  text-align: center;
+}
+.sorts {
+  margin: 10px;
 }
 .results-container {
   width: 100%;
